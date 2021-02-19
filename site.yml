@@ -1,0 +1,10 @@
+---
+
+- hosts: boundary
+  roles:
+    - bbaassssiiee.ansible_role_boundary
+  become: true
+  # tasks:
+  #   - name: 'hello'
+  #     debug:
+  #       msg: 'hello from boundary1'
