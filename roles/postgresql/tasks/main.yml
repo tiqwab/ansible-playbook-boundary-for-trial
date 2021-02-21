@@ -1,0 +1,56 @@
+---
+
+# ref. https://wiki.postgresql.org/wiki/Apt
+
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+      - python3-psycopg2
+    state: present
+
+- name: Import the repository key for PostgreSQL
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add repository for PostgreSQL
+  ansible.builtin.apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    state: present
+
+- name: Install PostgreSQL
+  ansible.builtin.apt:
+    name: postgresql-11
+    state: present
+
+- name: Start PostgreSQL
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+
+- name: Create a new database
+  community.postgresql.postgresql_db:
+    name: "{{ postgresql_dbname }}"
+  become: true
+  become_user: postgres
+
+- name: Create a new user
+  community.postgresql.postgresql_user:
+    db: "{{ postgresql_dbname }}"
+    name: "{{ postgresql_user }}"
+    password: "{{ postgresql_password }}"
+    priv: "ALL"
+    state: present
+  become: true
+  become_user: postgres
+
+- name: Create pgcrypto extension
+  community.postgresql.postgresql_ext:
+    name: pgcrypto
+    db: "{{ postgresql_dbname }}"
+    state: present
+  become: true
+  become_user: postgres

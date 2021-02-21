@@ -1,2 +1,9 @@
-[boundary]
+[boundary_controllers]
+boundary1 ansible_host=192.168.42.10
+
+# FIXME: boundary1 appears multiple times
+[boundary_workers]
+boundary1 ansible_host=192.168.42.10
+
+[postgresql]
 boundary1 ansible_host=192.168.42.10

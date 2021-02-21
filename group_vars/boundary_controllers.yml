@@ -1,0 +1,11 @@
+---
+
+# Database
+boundary_psql_username: boundary
+boundary_psql_dbname: boundary
+# TODO: use Ansible Vault
+boundary_psql_password: password
+boundary_psql_endpoint: localhost:5432
+
+# Create example admin, organization, and project when start
+boundary_db_init_flags: ''

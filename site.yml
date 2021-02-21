@@ -1,8 +1,18 @@
 ---
 
-- hosts: boundary
+- hosts: postgresql
   roles:
-    - bbaassssiiee.ansible_role_boundary
+    - role: postgresql
+      vars:
+        postgresql_dbname: "{{ boundary_psql_dbname }}"
+        postgresql_user: "{{ boundary_psql_username }}"
+        postgresql_password: "{{ boundary_psql_password }}"
+  become: true
+
+- hosts: boundary_controllers,boundary_workers
+  roles:
+    - role: boundary
+      tags: boundary
   become: true
   # tasks:
   #   - name: 'hello'
