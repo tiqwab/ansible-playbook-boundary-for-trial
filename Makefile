@@ -1,6 +1,12 @@
-default: run
+default: help
 
-run:
-	ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts -vvv site.yml
+help:
+	@echo 'Use `install` or `update` task'
 
-.PHONY: default main
+install:
+	ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --skip-tags update site.yml
+
+update:
+	ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --skip-tags install site.yml
+
+.PHONY: default install update help

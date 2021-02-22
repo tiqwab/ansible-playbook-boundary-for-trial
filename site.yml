@@ -14,6 +14,11 @@
     - role: boundary
       tags: boundary
   become: true
+  tasks:
+    - name: Show default username and password if necessary
+      debug:
+        msg: "{{ boundary_database_init.stdout_lines }}"
+      when: boundary_database_init is defined and boundary_database_init.changed
   # tasks:
   #   - name: 'hello'
   #     debug:

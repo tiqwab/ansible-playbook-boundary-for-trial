@@ -74,3 +74,22 @@ changed: [boundary1] => {
 ```
 
 構築が完了すれば `http://localhost:10200` にアクセスしてログイン画面が表示されるはず。
+
+### boundary database init を 2 回以上行ったときのエラー
+
+v0.1.4 では `Database already initialized.` と標準出力されるだけでエラーにはならなかった。
+
+v0.1.7 では `Unable to capture a lock on the database.` と言われ return code 1 が返される。
+エラー扱いになるのはともかくエラーメッセージは変じゃないか?
+
+init コマンドで実行されるのは `internal/cmd/commands/database/init.go` の処理のはず。
+内部的には init 特有の処理は前後にありそうだけど DB セットアップとしては migrate と同じ処理をしている。
+
+エラー自体は controller が動いているからでそれを止めれば実行できた。
+
+ただやはり v0.1.7 では一度 init していると `Database has already been initialized.  Please use 'boundary database migrate'.` と言われて return code 1 が返されるので playbook 的には初回でしか実行されないようにしたいところ。
+
+boundary の install に hook した handler を用意してそこでやるのがいいかなと。その場合初回インストールのみ init しないといけないが、その判定はまあ boundary が既にあるかないかを事前に見ておくとか?
+
+判定がちょっと面倒なので Make の task を初回 install と以降の update でわけて tags で制御することにした。
+現在は update の前には `systemctl stop boundary-controller` を手動でかけておく必要がある。

@@ -9,3 +9,5 @@ boundary_psql_endpoint: localhost:5432
 
 # Create example admin, organization, and project when start
 boundary_db_init_flags: ''
+
+boundary_version: 0.1.7
