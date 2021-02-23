@@ -19,7 +19,3 @@
       debug:
         msg: "{{ boundary_database_init.stdout_lines }}"
       when: boundary_database_init is defined and boundary_database_init.changed
-  # tasks:
-  #   - name: 'hello'
-  #     debug:
-  #       msg: 'hello from boundary1'
