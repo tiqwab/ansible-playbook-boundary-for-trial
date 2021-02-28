@@ -15,6 +15,15 @@
       tags: boundary
   become: true
   tasks:
+    - name: Add hosts setting
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: "^{{ boundary_address }}\\s+{{ inventory_hostname }}\\s$"
+        line: "{{ boundary_address }} {{ inventory_hostname }}"
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Show default username and password if necessary
       debug:
         msg: "{{ boundary_database_init.stdout_lines }}"
