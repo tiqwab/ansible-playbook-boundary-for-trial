@@ -89,12 +89,7 @@ init コマンドで実行されるのは `internal/cmd/commands/database/init.g
 
 ただやはり v0.1.7 では一度 init していると `Database has already been initialized.  Please use 'boundary database migrate'.` と言われて return code 1 が返されるので playbook 的には初回でしか実行されないようにしたいところ。
 
-boundary の install に hook した handler を用意してそこでやるのがいいかなと。その場合初回インストールのみ init しないといけないが、その判定はまあ boundary が既にあるかないかを事前に見ておくとか?
-
-判定がちょっと面倒なので Make の task を初回 install と以降の update でわけて tags で制御することにした。
-現在は update の前には `systemctl stop boundary-controller` を手動でかけておく必要がある。
-
-ただ update はプラットフォーム依存の部分とか詰めきれないのでいっそ無しにしてしまう方がいいかもしれない。
+パッケージの update には対応しない前提で、パッケージインストール時のみ initialization が走るようにした。
 
 ### API の TLS 化
 
@@ -103,8 +98,6 @@ boundary の install に hook した handler を用意してそこでやるの�
 ```
 # for initial installation
 $ make install-tls
-# for update
-$ make update-tls
 ```
 
 単に動作確認をしたいだけなら上のコマンド実行前に `make cert` で `boundary.example.com` 向けの証明書を作成して使用できる。
